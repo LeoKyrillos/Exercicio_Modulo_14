@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npx serverest",
     "cy:run": "npx cypress run",
+    "cy:open": "npx cypress open",
     "cy:report": "npx mochawesome-merge .\\mochawesome-report\\mochawesome*.json  > mochawesome-report\\report.json && npx marge mochawesome-report\\report.json"
   },
   "keywords": [],
@@ -17,6 +18,7 @@
   },
   "dependencies": {
     "cypress-multi-reporters": "^1.5.0",
+    "faker": "^5.5.3",
     "joi": "^17.4.2",
     "mocha": "^9.1.0",
     "mochawesome": "^6.2.2",
