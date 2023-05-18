@@ -49,23 +49,17 @@ describe('Testes da Funcionalidade Usuários', () => {
 
 
      it('Deve validar um usuário com email inválido', () => {
-          
-          cy.request({
-                method: 'POST',
-                url: 'usuarios',
-                body: {
-                     "nome": "José Carlos",
-                     "email": "jcarlos.com.br",
-                     "password": "teste1",
-                     "administrador": "true"
-                },
-                failOnStatusCode: false
 
-           }).then((response) => {
+          let administrador = 'true'
+          
+          cy.cadastrarUsuario("Flavio José", "flaviojose.com.br", "123321", administrador)
+
+          .then((response) => {
                 expect(response.status).to.equal(400)
                 expect(response.body.email).to.equal('email deve ser um email válido')
 
-          })           
+          })
+                 
      });
 
      it('Deve editar um usuário previamente cadastrado', () => {
@@ -118,9 +112,7 @@ describe('Testes da Funcionalidade Usuários', () => {
                    expect(response.status).to.equal(200)
                    expect(response.body.message).to.equal("Registro alterado com sucesso")
                })
-           })
-
-          
+           })          
      });
 
      it('Deve deletar um usuário previamente cadastrado', () => {
@@ -136,7 +128,7 @@ describe('Testes da Funcionalidade Usuários', () => {
           }) 
      });
 
-     it.only('Deve DELETAR usuário já cadastrado com comando customizado', () => {
+     it('Deve DELETAR usuário já cadastrado com comando customizado', () => {
 
           let email = `xandom${Math.floor(Math.random() * 10000000)}@gmail.com`
           let password = `${Math.floor(Math.random() * 10000000)}`
@@ -156,8 +148,10 @@ describe('Testes da Funcionalidade Usuários', () => {
                 }).then(response =>{
                     expect(response.status).to.equal(200)
                     expect(response.body.message).to.equal("Registro excluído com sucesso")
-                })
-            })
+               })
           
-     });
-});
+          })
+
+     });     
+
+ });
