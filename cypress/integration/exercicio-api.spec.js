@@ -9,14 +9,14 @@ describe('Testes da Funcionalidade Usuários', () => {
      })
 
      it('Deve validar contrato de usuários', () => {
-          //Teste Passa
+          
           cy.request('usuarios').then(response => {
                 return contrato.validateAsync(response.body)
            })
      });
 
      it('Deve listar usuários cadastrados', () => {
-          //Teste Passa
+          
           cy.request({
                method: 'GET',
                url: 'usuarios'
@@ -27,13 +27,16 @@ describe('Testes da Funcionalidade Usuários', () => {
      });
 
      it('Deve cadastrar um usuário com sucesso', () => {
-          //Teste Passa *trocar numero no corpo do email
+
+          let email = `${Math.floor(Math.random() * 10000000)}@gmail.com`
+          let nome = `Carlos José${Math.floor(Math.random() * 10000000)}`
+          
           cy.request({
                 method: 'POST',
                 url: 'usuarios',
                 body: {
-                     "nome": "José Carlos", //tornar nome dinamico
-                     "email": "jcarlos@qa8.com.br", //tornar email dinamico
+                     "nome": nome, //nome dinamico
+                     "email": email, //email dinamico
                      "password": "teste1",
                      "administrador": "true"
                 }
@@ -46,7 +49,7 @@ describe('Testes da Funcionalidade Usuários', () => {
 
 
      it('Deve validar um usuário com email inválido', () => {
-          //Teste Passa
+          
           cy.request({
                 method: 'POST',
                 url: 'usuarios',
@@ -66,7 +69,9 @@ describe('Testes da Funcionalidade Usuários', () => {
      });
 
      it('Deve editar um usuário previamente cadastrado', () => {
-          //Teste Passa
+          
+          let email = `${Math.floor(Math.random() * 10000000)}@gmail.com`
+
           cy.request('usuarios').then(response => {
                let id = response.body.usuarios[5]._id
                cy.request({
@@ -75,7 +80,7 @@ describe('Testes da Funcionalidade Usuários', () => {
                     body:
                     {
                          "nome": "Manoel Alterado",
-                         "email": "manoelalterado@qa2.com.br", //tornar email dinamico
+                         "email": email, //email dinamico
                          "password": "teste",
                          "administrador": "true"
                     }
@@ -85,7 +90,40 @@ describe('Testes da Funcionalidade Usuários', () => {
           })
      });
 
-     it.only('Deve deletar um usuário previamente cadastrado', () => {
+     it('Deve EDITAR um usuário já cadastrado com comando customizado', () => {
+
+          let email = `xandom${Math.floor(Math.random() * 10000000)}@gmail.com`
+          let password = `${Math.floor(Math.random() * 10000000)}`
+          let administrador = 'true'
+
+          cy.cadastrarUsuario("Xando Maranhão", email, password, administrador)
+          .then((response) => {
+               expect(response.status).to.equal(201)
+               expect(response.body.message).to.equal('Cadastro realizado com sucesso')
+          })
+
+          .then(response => {
+               let id = response.body._id
+               cy.request({
+                   method: 'PUT',
+                   url: `usuarios/${id}`,
+                   body:
+                   {
+                       "nome": "Carlos Porto",
+                       "email": email,
+                       "password": password,
+                       "administrador": administrador
+                   }
+               }).then(response => {
+                   expect(response.status).to.equal(200)
+                   expect(response.body.message).to.equal("Registro alterado com sucesso")
+               })
+           })
+
+          
+     });
+
+     it('Deve deletar um usuário previamente cadastrado', () => {
           cy.request('usuarios').then(response => {
                let id = response.body.usuarios[5]._id
                cy.request({
@@ -98,6 +136,28 @@ describe('Testes da Funcionalidade Usuários', () => {
           }) 
      });
 
+     it.only('Deve DELETAR usuário já cadastrado com comando customizado', () => {
 
+          let email = `xandom${Math.floor(Math.random() * 10000000)}@gmail.com`
+          let password = `${Math.floor(Math.random() * 10000000)}`
+          let administrador = 'true'
 
+          cy.cadastrarUsuario("Xando Maranhão", email, password, administrador)
+          .then((response) => {
+               expect(response.status).to.equal(201)
+               expect(response.body.message).to.equal('Cadastro realizado com sucesso')
+            })
+            .then(response=>{
+                let id = response.body._id
+                cy.request({
+                    method: 'DELETE',
+                    url: `usuarios/${id}`,
+                    
+                }).then(response =>{
+                    expect(response.status).to.equal(200)
+                    expect(response.body.message).to.equal("Registro excluído com sucesso")
+                })
+            })
+          
+     });
 });
