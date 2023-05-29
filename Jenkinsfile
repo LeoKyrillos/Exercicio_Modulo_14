@@ -12,6 +12,11 @@ pipeline{
               bat "npm install"
             }
         }
+        stage("Subir o Servidor") {
+            steps {
+              bat "npx serverest"
+            }
+        }
         stage ("Executar Testes") {
             steps {
                 bat "npm run cy:run"

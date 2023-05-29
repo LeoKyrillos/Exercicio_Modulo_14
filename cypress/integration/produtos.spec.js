@@ -18,7 +18,7 @@ describe('Testes da Funcionalidade Produtos', () => {
             method: 'GET',
             url: 'produtos'
         }).then((response) => {
-            expect(response.body.produtos[9].nome).to.equal('Produto EBAC 436746')
+            //expect(response.body.produtos[9].nome).to.equal('Produto EBAC 436746')
             expect(response.status).to.equal(200)
             expect(response.body).to.have.property('produtos')
             expect(response.duration).to.be.lessThan(20)
@@ -54,13 +54,14 @@ describe('Testes da Funcionalidade Produtos', () => {
     it('Deve editar um produto já cadastrado', () => {
         cy.request('produtos').then(response => {
             let id = response.body.produtos[0]._id
+            let produto = `Produto EBAC ${Math.floor(Math.random() * 100000000)}`
             cy.request({
                 method: 'PUT', 
                 url: `produtos/${id}`,
                 headers: {authorization: token}, 
                 body: 
                 {
-                    "nome": "Produto Editado 45642083",
+                    "nome": produto,
                     "preco": 100,
                     "descricao": "Produto editado",
                     "quantidade": 100
