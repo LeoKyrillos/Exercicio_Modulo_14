@@ -8,6 +8,7 @@
     "start": "npx serverest",
     "cy:run": "npx cypress run",
     "cy:open": "npx cypress open",
+    "cy:run-ci": "start-server-and-test serverest http://localhost:3000/usuarios teste",
     "cy:report": "npx mochawesome-merge .\\mochawesome-report\\mochawesome*.json  > mochawesome-report\\report.json && npx marge mochawesome-report\\report.json"
   },
   "keywords": [],
